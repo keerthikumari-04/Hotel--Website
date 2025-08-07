@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Seaside Luxury Hotel</title>
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: #fafafa;
+      color: #333;
+      line-height: 1.6;
+    }
+    a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    header {
+      background: #004c99;
+      color: white;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    header h1 {
+      font-size: 1.8rem;
+    }
+    nav {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+    nav a {
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    nav a:hover, nav a.active {
+      background: #0077cc;
+      color: white;
+    }
+    main {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    section {
+      margin-bottom: 3rem;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+    }
+    h2 {
+      margin-bottom: 1rem;
+      color: #004c99;
+      border-bottom: 2px solid #004c99;
+      padding-bottom: 0.3rem;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      height: 350px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(60%);
+    }
+    .hero-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      text-align: center;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
+    .hero-text h2 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+    .hero-text p {
+      font-size: 1.3rem;
+    }
+
+    /* Rooms */
+    .rooms {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+      gap: 1.5rem;
+    }
+    .room-card {
+      background: #e6f0ff;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,76,153,0.2);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .room-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 20px rgba(0,76,153,0.4);
+    }
+    .room-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .room-card .room-info {
+      padding: 1rem;
+    }
+    .room-card h3 {
+      margin-bottom: 0.5rem;
+      color: #003366;
+    }
+    .room-card p {
+      font-size: 0.95rem;
+      color: #444;
+      margin-bottom: 0.8rem;
+    }
+    .room-card .price {
+      font-weight: 700;
+      color: #004c99;
+      font-size: 1.1rem;
+    }
+
+    /* Amenities */
+    .amenities-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .amenity {
+      flex: 1 1 200px;
+      background: #d9eaff;
+      border-radius: 6px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 1px 5px rgba(0,76,153,0.1);
+      transition: background-color 0.3s ease;
+    }
+    .amenity:hover {
+      background: #c0dbff;
+    }
+    .amenity img {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 0.5rem;
+    }
+    .amenity p {
+      font-weight: 600;
+      color: #004c99;
+    }
+
+    /* Gallery */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+      gap: 1rem;
+    }
+    .gallery img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Booking / Reservation Form */
+    form {
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    label {
+      font-weight: 600;
+    }
+    input, select, textarea {
+      padding: 0.75rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    button {
+      background: #004c99;
+      color: white;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      max-width: 200px;
+    }
+    button:hover {
+      background: #003366;
+    }
+
+    /* Footer */
+    footer {
+      background: #004c99;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+      border-radius: 0 0 8px 8px;
+      margin-top: 2rem;
+    }
+
+    /* Signup/Login modal styles */
+    #authModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 500;
+    }
+    #authModal.active {
+      display: flex;
+    }
+    .auth-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .auth-container h3 {
+      margin-bottom: 1rem;
+      color: #004c99;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: #004c99;
+    }
+    .toggle-link {
+      color: #0077cc;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 0.5rem;
+      display: inline-block;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+      .hero-text h2 {
+        font-size: 2rem;
+      }
+      .rooms {
+        grid-template-columns: 1fr;
+      }
+      .gallery {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Seaside Luxury Hotel</h1>
+    <nav id="navbar">
+      <a href="#home" class="active">Home</a>
+      <a href="#rooms">Rooms</a>
+      <a href="#amenities">Amenities</a>
+      <a href="#restaurant">Restaurant</a>
+      <a href="#events">Events</a>
+      <a href="#booking">Reservations</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#contact">Contact</a>
+      <a href="#" id="loginBtn">Login</a>
+      <a href="#" id="signupBtn">Sign Up</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80" alt="Hotel View" />
+      <div class="hero-text">
+        <h2>Experience Luxury & Comfort</h2>
+        <p>Your perfect getaway by the sea awaits.</p>
+      </div>
+    </section>
+
+    <section id="rooms">
+      <h2>Our Rooms</h2>
+      <div class="rooms">
+        <div class="room-card">
+          <img src="https://images.unsplash.com/photo-1560448070-c9eebf7179f3?auto=format&fit=crop&w=800&q=60" alt="Deluxe Room" />
+          <div class="room-info">
+            <h3>Deluxe Room</h3>
+            <p>Comfortable room with sea view, king-size bed, and modern amenities.</p>
+            <p class="price">$150 / night</p>
+          </div>
+        </div>
+        <div class="room-card">
+          <img src="https://images.unsplash.com/photo-1501183638714-0f3f9d7f57d0?auto=format&fit=crop&w=800&q=60" alt="Suite" />
+          <div class="room-info">
+            <h3>Suite</h3>
+            <p>Spacious suite with living area, balcony, and luxury furnishings.</p>
+            <p class="price">$280 / night</p>
+          </div>
+        </div>
+        <div class="room-card">
+          <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=60" alt="Standard Room" />
+          <div class="room-info">
+            <h3>Standard Room</h3>
+            <p>Cozy room with all essential comforts and a city view.</p>
+            <p class="price">$100 / night</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="amenities">
+      <h2>Amenities</h2>
+      <div class="amenities-list">
+        <div class="amenity">
+          <img src="https://img.icons8.com/ios-filled/50/004c99/wifi.png" alt="Wi-Fi" />
+          <p>Free Wi-Fi</p>
+        </div>
+        <div class="amenity">
+          <img src="https://img.icons8.com/ios-filled/50/004c99/swimming-pool.png" alt="Swimming Pool" />
+          <p>Swimming Pool</p>
+        </div>
+        <div class="amenity">
+          <img src="https://img.icons8.com/ios-filled/50/004c99/spa.png" alt="Spa" />
+          <p>Spa & Wellness</p>
+        </div>
+        <div class="amenity">
+          <img src="https://img.icons8.com/ios-filled/50/004c99/restaurant.png" alt="Restaurant" />
+          <p>On-site Restaurant</p>
+        </div>
+        <div class="amenity">
+          <img src="https://img.icons8.com/ios-filled/50/004c99/parking.png" alt="Parking" />
+          <p>Free Parking</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="restaurant">
+      <h2>Restaurant & Dining</h2>
+      <p>Enjoy exquisite dishes prepared by our top chefs at the Ocean View Restaurant. Fresh seafood, international cuisines, and seasonal specialties await you.</p>
+      <ul>
+        <li>Breakfast Buffet: 7 AM - 10 AM</li>
+        <li>Lunch: 12 PM - 3 PM</li>
+        <li>Dinner: 6 PM - 11 PM</li>
+        <li>Private dining and special event catering available</li>
+      </ul>
+    </section>
+
+    <section id="events">
+      <h2>Events & Meetings</h2>
+      <p>Host your events, weddings, conferences, and meetings in our elegant event spaces equipped with modern technology and catering options.</p>
+      <ul>
+        <li>Conference Room: up to 100 guests</li>
+        <li>Banquet Hall: up to 200 guests</li>
+        <li>Outdoor Garden Venue</li>
+        <li>Event planning and catering services</li>
+      </ul>
+    </section>
+
+    <section id="booking">
+      <h2>Make a Reservation</h2>
+      <form id="reservationForm">
+        <label for="reservationType">Reservation Type</label>
+        <select id="reservationType" required>
+          <option value="">Select type</option>
+          <option value="Hotel Room">Hotel Room</option>
+          <option value="Restaurant Dining">Restaurant Dining</option>
+          <option value="Event Booking">Event Booking</option>
+        </select>
+
+        <div id="hotelFields" style="display:none;">
+          <label for="checkin">Check-in Date</label>
+          <input type="date" id="checkin" />
+
+          <label for="checkout">Check-out Date</label>
+          <input type="date" id="checkout" />
+
+          <label for="roomType">Room Type</label>
+          <select id="roomType">
+            <option value="">Select Room</option>
+            <option value="Standard Room">Standard Room</option>
+            <option value="Deluxe Room">Deluxe Room</option>
+            <option value="Suite">Suite</option>
+          </select>
+
+          <label for="guests">Number of Guests</label>
+          <input type="number" id="guests" min="1" max="10" value="1" />
+        </div>
+
+        <div id="restaurantFields" style="display:none;">
+          <label for="diningDate">Dining Date</label>
+          <input type="date" id="diningDate" />
+
+          <label for="diningTime">Dining Time</label>
+          <input type="time" id="diningTime" />
+
+          <label for="diningGuests">Number of Guests</label>
+          <input type="number" id="diningGuests" min="1" max="20" value="1" />
+        </div>
+
+        <div id="eventFields" style="display:none;">
+          <label for="eventDate">Event Date</label>
+          <input type="date" id="eventDate" />
+
+          <label for="eventType">Event Type</label>
+          <select id="eventType">
+            <option value="">Select Event</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Conference">Conference</option>
+            <option value="Party">Party</option>
+            <option value="Meeting">Meeting</option>
+          </select>
+
+          <label for="eventGuests">Number of Guests</label>
+          <input type="number" id="eventGuests" min="1" max="300" value="10" />
+          <label for="additionalInfo">Additional Info</label>
+          <textarea id="additionalInfo" rows="3" placeholder="Special requests or notes"></textarea>
+        </div>
+
+        <button type="submit">Submit Reservation</button>
+      </form>
+    </section>
+
+    <section id="gallery">
+      <h2>Gallery</h2>
+      <div class="gallery">
+        <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=400&q=60" alt="Hotel Room" />
+        <img src="https
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=60" alt="Hotel Exterior" />
+        <img src="https://images.unsplash.com/photo-1523906630133-f6934a6abfda?auto=format&fit=crop&w=400&q=60" alt="Hotel Restaurant" />
+        <img src="https://images.unsplash.com/photo-1501183638714-0f3f9d7f57d0?auto=format&fit=crop&w=400&q=60" alt="Hotel Pool" />
+        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=60" alt="Event Hall" />
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p>For inquiries and assistance, please contact us at:</p>
+      <ul>
+        <li>Email: info@seasideluxuryhotel.com</li>
+        <li>Phone: +1 234 567 890</li>
+        <li>Address: 123 Ocean Drive, Beach City, Country</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Seaside Luxury Hotel. All rights reserved.</p>
+  </footer>
+
+  <!-- Signup/Login Modal -->
+  <div id="authModal">
+    <div class="auth-container">
+      <span class="close-btn" id="closeAuth">&times;</span>
+      
+      <!-- Login Form -->
+      <form id="loginForm">
+        <h3>Login</h3>
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com" required />
+        
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Password" required />
+        
+        <button type="submit">Login</button>
+        <p>Don't have an account? <span class="toggle-link" id="showSignup">Sign Up</span></p>
+      </form>
+
+      <!-- Signup Form -->
+      <form id="signupForm" style="display:none;">
+        <h3>Sign Up</h3>
+        <label for="signupName">Full Name</label>
+        <input type="text" id="signupName" placeholder="Your Name" required />
+        
+        <label for="signupEmail">Email</label>
+        <input type="email" id="signupEmail" placeholder="you@example.com" required />
+        
+        <label for="signupPassword">Password</label>
+        <input type="password" id="signupPassword" placeholder="Create password" required />
+        
+        <button type="submit">Sign Up</button>
+        <p>Already have an account? <span class="toggle-link" id="showLogin">Login</span></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Handle reservation form fields toggling based on selection
+    const reservationType = document.getElementById('reservationType');
+    const hotelFields = document.getElementById('hotelFields');
+    const restaurantFields = document.getElementById('restaurantFields');
+    const eventFields = document.getElementById('eventFields');
+
+    reservationType.addEventListener('change', () => {
+      const val = reservationType.value;
+      hotelFields.style.display = val === 'Hotel Room' ? 'block' : 'none';
+      restaurantFields.style.display = val === 'Restaurant Dining' ? 'block' : 'none';
+      eventFields.style.display = val === 'Event Booking' ? 'block' : 'none';
+    });
+
+    // Modal toggling logic
+    const authModal = document.getElementById('authModal');
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    const closeAuth = document.getElementById('closeAuth');
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    const showSignup = document.getElementById('showSignup');
+    const showLogin = document.getElementById('showLogin');
+
+    loginBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      authModal.classList.add('active');
+      loginForm.style.display = 'block';
+      signupForm.style.display = 'none';
+    });
+
+    signupBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      authModal.classList.add('active');
+      signupForm.style.display = 'block';
+      loginForm.style.display = 'none';
+    });
+
+    closeAuth.addEventListener('click', () => {
+      authModal.classList.remove('active');
+    });
+
+    showSignup.addEventListener('click', () => {
+      loginForm.style.display = 'none';
+      signupForm.style.display = 'block';
+    });
+
+    showLogin.addEventListener('click', () => {
+      signupForm.style.display = 'none';
+      loginForm.style.display = 'block';
+    });
+
+    // Close modal on clicking outside the container
+    window.addEventListener('click', (e) => {
+      if (e.target === authModal) {
+        authModal.classList.remove('active');
+      }
+    });
+
+    // Example form submission handlers
+    document.getElementById('reservationForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Reservation submitted! We will contact you soon.');
+      e.target.reset();
+      hotelFields.style.display = 'none';
+      restaurantFields.style.display = 'none';
+      eventFields.style.display = 'none';
+    });
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Logged in successfully!');
+      authModal.classList.remove('active');
+      loginForm.reset();
+    });
+
+    signupForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Account created successfully!');
+      authModal.classList.remove('active');
+      signupForm.reset();
+    });
+  </script>
+</body>
+</html>
